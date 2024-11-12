@@ -76,9 +76,6 @@ public class UserInterface {
                 case 4:
                     handleCheckout();
                     break;
-                case 0:
-                    handleCancelOrder();
-                    break;
                 default:
                     System.out.println("Invalid input. . .");
             }
@@ -120,7 +117,7 @@ public class UserInterface {
 
         int sandwichToastedOption = inputScanner.nextInt();
         boolean isToasted = sandwichToastedOption == 1;
-        sandwich = new Sandwich(breadOptions.get(breadChoice), breadSize.get(sandwichSize), isToasted);
+        sandwich = new Sandwich(breadOptions.get(breadChoice), breadSize.get(sandwichSize), isToasted, false, false);
 
         System.out.println("Topping selection");
         enum Protein {
@@ -162,21 +159,50 @@ public class UserInterface {
         // protein selection passed into add topping
         if (proteinSelection != 0) {
             Protein proteinChoice = Protein.values()[proteinSelection - 1];
-            sandwich.addTopping(new Topping(proteinChoice.name, "Protein"));
+           sandwich.addTopping( new Topping(proteinChoice.name, "Protein"));
+
+            System.out.println("Would you like to add an extra protein? 1) yes 2) no ");
+
+            int extraProteinSelection = inputScanner.nextInt();
+            boolean wantsExtraProtein = extraProteinSelection == 1;
+            if(wantsExtraProtein){
+                int extraProteinIndex = 1;
+                for (Protein p : Protein.values()) {
+                    System.out.println(extraProteinIndex + ") " + p.name);
+                    extraProteinIndex++;
+                }
+                int extraProteinChoice = inputScanner.nextInt();
+                Protein extraProtein = Protein.values()[extraProteinChoice - 1];
+                sandwich.addExtras(new Topping(extraProtein.name, "Protein"));
+                sandwich.setExtraProtein(true);
+            }
+
         }
         inputScanner.nextLine();
 
         System.out.println("Choose a cheese or enter 0 to skip");
-        index = 0;
+        index = 1;
         for (Cheese c : Cheese.values()) {
-            System.out.println(index + 1 + ") " + c.name);
+            System.out.println(index + ") " + c.name);
             index++;
         }
         int cheeseSelection = inputScanner.nextInt();
         if (cheeseSelection != 0) {
             Cheese cheeseChoice = Cheese.values()[cheeseSelection - 1];
             sandwich.addTopping(new Topping(cheeseChoice.name, "Cheese"));
+
+            System.out.println("Would you like to add extra cheese? 1) yes 2) no");
+            int extraCheeseSelection = inputScanner.nextInt();
+            boolean extraCheese = extraCheeseSelection == 1;
+
+            int cheeseSelectionIndex = 1;
+            for(Cheese c : Cheese.values()){
+                System.out.println(cheeseSelectionIndex + ") " + c.name);
+
+            }
+
         }
+
 
         System.out.println("Choose veggies");
         while (true) {
@@ -198,7 +224,7 @@ public class UserInterface {
 
         Product product = sandwich;
 
-        products.add(product);
+        order.addProduct(product);
 
 
     }
@@ -231,7 +257,7 @@ public class UserInterface {
         Drinks drinkChoice = Drinks.values()[drinkSelection - 1];
         product = new Drink(drinkChoice.name, sizeOption);
 
-        products.add(product);
+        order.addProduct(product);
     }
 
     private static void handleAddChips() {
@@ -245,8 +271,8 @@ public class UserInterface {
             }
         }
         System.out.println("Chip selection");
-       int index = 1;
-        for(Chips c : Chips.values()){
+        int index = 1;
+        for (Chips c : Chips.values()) {
             System.out.println(index + ") " + c.name);
             index++;
         }
@@ -256,27 +282,26 @@ public class UserInterface {
         Chips chipChoice = Chips.values()[chipSelection - 1];
         Product product = new BagOfChips(chipChoice.name);
 
-        products.add(product);
+       order.addProduct(product);
 
 
     }
 
     private static void handleCheckout() {
-        for(Product p : products){
-            order.addProduct(p);
-        }
+
         System.out.println("Displaying order");
         System.out.println("Id: " + order.getOrderId() + " Order Name: " + order.getOrderName());
-        for(Product p: order.getProducts()){
+        for (Product p : order.getProducts()) {
             System.out.print(p + "\n");
         }
         System.out.println("Total price: " + order.getPrice());
+
+        // TODO: add logic to either confirm or cancel order
+        // boolean confirm// boolean cancel
+        // confirm write to file
+        // cancel == order.null
     }
 
-    private static void handleCancelOrder() {
-        //clear the array
-        System.out.println("Canceling Order. . .");
-    }
 
 }
 

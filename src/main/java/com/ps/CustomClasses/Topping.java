@@ -1,10 +1,9 @@
 package com.ps.CustomClasses;
 
-public class Topping  {
+public class Topping {
     private String name;
     private String type;
     private double basePrice;
-
 
 
     public Topping(String name, String type) {
@@ -25,15 +24,35 @@ public class Topping  {
         this.type = type;
     }
 
-    public double getPrice(){
-        if(this.type.equals("Cheese")){
-            basePrice =  .75;
-        } else if(this.type.equals("Protein")){
-            basePrice = 1.00;
-        } else {
-            basePrice = 0;
-        }
-return  basePrice;
+
+    public double getPrice(String sandwichSize) {
+          if(type.equals("Protein")){
+              switch(sandwichSize){
+                  case "12 inch":
+                      basePrice = 3.00;
+                      break;
+                  case "8 inch":
+                      basePrice = 2.00;
+                      break;
+                  default:
+                      basePrice = 1.00;
+                      break;
+              }
+          } else if(type.equals("Cheese")){
+              switch (sandwichSize){
+                  case "12 inch":
+                      basePrice = 2.25;
+                      break;
+                  case "8 inch":
+                      basePrice = 1.50;
+                      break;
+                  default:
+                      basePrice = .75;
+              }
+          } else {
+              basePrice = 0;
+          }
+        return basePrice;
     }
 
     public void setName(String name) {

@@ -39,7 +39,7 @@ public class Order {
         return products;
     }
     public  double getPrice(){
-        List<Product> productsToAdd = new ArrayList<>();
+
         double totalPrice = 0;
         for(Product p: products){
             totalPrice += p.getPrice();
