@@ -2,9 +2,10 @@ package com.ps.CustomClasses;
 
 public class Drink extends Product {
     private String name;
-    private double size;
+    private int size;
+    private double basePrice;
 
-    public Drink(String name, double size) {
+    public Drink(String name, int size) {
         this.name = name;
         this.size = size;
     }
@@ -17,24 +18,37 @@ public class Drink extends Product {
         this.name = name;
     }
 
-    public double getSize() {
+    public int getSize() {
         return size;
     }
+    public String getStringSize(){
+        if(size == 1){
+            return "Large";
+        } else if(size == 2){
+            return "Medium";
+        }   else {
+            return "Small";
+        } }
 
-    public void setSize(double size) {
+    public void setSize(int size) {
         this.size = size;
     }
 
     @Override
     public double getPrice() {
-        return 0;
+        if(this.size == 1){
+            basePrice = 3.00;
+        } else if( this.size == 2){
+            basePrice = 2.50;
+        } else {
+            basePrice = 2.00;
+        }
+        return basePrice;
+
     }
 
     @Override
     public String toString() {
-        return "Drink{" +
-                "name='" + name + '\'' +
-                ", size=" + size +
-                '}';
+        return "Drink: " + name + ", Size: " + getStringSize();
     }
 }

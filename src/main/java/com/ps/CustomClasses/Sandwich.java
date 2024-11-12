@@ -1,38 +1,45 @@
 package com.ps.CustomClasses;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Sandwich extends Product {
     private String breadType;
-    private int size;
+    private String size;
     private boolean isToasted;
-    List<String> toppings;
+    private double basePrice;
+    List<Topping> toppings;
+    //lIST OF SAUCES
+    // LIST OF SIDES
 
-    public Sandwich(String breadType, int size, boolean isToasted) {
+    public Sandwich(String breadType, String size, boolean isToasted) {
         this.breadType = breadType;
         this.size = size;
         this.isToasted = isToasted;
         this.toppings = new ArrayList<>();
     }
 
-    public void addTopping(String topping){
-           toppings.add(topping);
+    public void addTopping(Topping topping){
+        toppings.add(topping);
     }
 
     public boolean isToasted() {
-        return isToasted;
+        return  isToasted;
+    }
+    public String getIsToasted(){
+        return isToasted ? "Toasted" : "Fresh";
     }
 
     public void setToasted(boolean toasted) {
         isToasted = toasted;
     }
 
-    public int getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(String size) {
         this.size = size;
     }
 
@@ -44,18 +51,27 @@ public class Sandwich extends Product {
         this.breadType = breadType;
     }
 
+
+
     @Override
     public double getPrice() {
-        return 0;
+
+        if(this.size.equals("12 inch")){
+            this.basePrice = 8.50;
+        } else if( this.size.equals("8 inch")){
+            this.basePrice = 7.00;
+        } else {
+            this.basePrice = 5.50;
+        }
+        for(Topping t : toppings){
+           this.basePrice += t.getPrice();
+        }
+
+        return this.basePrice;
     }
 
     @Override
     public String toString() {
-        return "Sandwich{" +
-                "breadType='" + breadType + '\'' +
-                ", size='" + size + '\'' +
-                ", isToasted=" + isToasted +
-                ", toppings=" + toppings +
-                '}';
+        return String.format("Sandwich: %s, %s, %s, Toppings: %s", getBreadType(), getSize(), getIsToasted(), this.toppings);
     }
 }

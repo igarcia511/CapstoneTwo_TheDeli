@@ -17,6 +17,12 @@ public class BagOfChips extends Product {
 
     @Override
     public double getPrice() {
-        return 0;
+        return 1.50;
+
+    }
+
+    @Override
+    public String toString() {
+        return "Chips: " + name;
     }
 }
