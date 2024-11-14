@@ -3,6 +3,7 @@ package com.ps.CustomClasses;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Sandwich extends Product {
     private String breadType;
@@ -20,22 +21,32 @@ public class Sandwich extends Product {
         this.breadType = breadType;
         this.size = size;
         this.isToasted = isToasted;
+        this.extraProtein = extraProtein;
+        this.extraCheese = extraCheese;
         this.toppings = new ArrayList<>();
         this.extras = new ArrayList<>();
     }
 
-    public void addTopping(Topping topping){
+    public void addTopping(Topping topping) {
         toppings.add(topping);
     }
-    public void addExtras(Topping topping){
+    public List<Topping> getToppings(){
+        return this.toppings;
+    }
+
+    public void addExtras(Topping topping) {
         extras.add(topping);
+    }
+    public List<Topping> getExtras(){
+        return this.extras;
     }
 
     public boolean isToasted() {
-        return  isToasted;
+        return isToasted;
     }
-    public String getIsToasted(){
-        return isToasted ? "Toasted" : "Fresh";
+
+    public String getIsToasted() {
+        return isToasted ? "toasted" : "fresh";
     }
 
     public boolean isExtraProtein() {
@@ -78,26 +89,59 @@ public class Sandwich extends Product {
     @Override
     public double getPrice() {
 
-        if(this.size.equals("12 inch")){
+        if (this.size.equals("12 inch")) {
             this.basePrice = 8.50;
-        } else if( this.size.equals("8 inch")){
+        } else if (this.size.equals("8 inch")) {
             this.basePrice = 7.00;
         } else {
             this.basePrice = 5.50;
         }
-        for(Topping t : toppings){
-           this.basePrice += t.getPrice(size);
+        for (Topping t : toppings) {
+            this.basePrice += t.getPrice(size);
         }
-        if(isExtraProtein()){
+        if (this.isExtraProtein()) {
+            for (Topping t : extras) {
+                if(t.getType().equals("extra protein")){
+                    this.basePrice += t.getExtrasPrice(size);
+                }
+            }
+        }
+        if(this.isExtraCheese()){
+            for(Topping t : extras){
+                if(t.getType().equals("extra cheese")){
+                    this.basePrice += t.getExtrasPrice(size);
 
+                }
+            }
         }
+
+
 
 
         return this.basePrice;
     }
+     public String getExtrasAsString(){
+         String extraToppingsAsStrings = extras.stream()
+                 .map(Topping::toString)
+                 .collect(Collectors.joining(", "));
+         return extraToppingsAsStrings;
+     }
+     public String getToppingsAsString(){
+         String toppingsAsStrings = toppings.stream()
+                 .map(Topping::toString)
+                 .collect(Collectors.joining(", "));
+         return toppingsAsStrings;
+     }
 
     @Override
     public String toString() {
-        return String.format("Sandwich: %s, %s, %s, Toppings: %s, Extras: %s", getBreadType(), getSize(), getIsToasted(), this.toppings, this.extras);
+        String toppingsAsStrings = toppings.stream()
+                .map(Topping::toString)
+                .collect(Collectors.joining(","));
+
+        String extraToppingsAsStrings = extras.stream()
+                .map(Topping::toString)
+                .collect(Collectors.joining(","));
+        return String.format("Sandwich: %s, %s, %s, Toppings: %s, Extras: %s", getBreadType(), getSize(), getIsToasted(), toppingsAsStrings, extraToppingsAsStrings);
     }
 }

@@ -10,7 +10,6 @@ public class UserInterface {
     static Order order;
     private static Scanner commandScanner = new Scanner(System.in);
     private static Scanner inputScanner = new Scanner(System.in);
-    private static List<Product> products = new ArrayList<>();
     private static int orderIndexId;
 
     public static void init() {
@@ -57,7 +56,6 @@ public class UserInterface {
             System.out.println("2) Add Drink");
             System.out.println("3) Add Chips");
             System.out.println("4) Checkout");
-            System.out.println("0) Cancel Order");
 
             System.out.print("Selection: ");
 
@@ -81,7 +79,7 @@ public class UserInterface {
             }
 
 
-        } while (orderCommand != 0);
+        } while (orderCommand != 4);
     }
 
     private static void handleAddSandwich() {
@@ -173,7 +171,7 @@ public class UserInterface {
                 }
                 int extraProteinChoice = inputScanner.nextInt();
                 Protein extraProtein = Protein.values()[extraProteinChoice - 1];
-                sandwich.addExtras(new Topping(extraProtein.name, "Protein"));
+                sandwich.addExtras(new Topping(extraProtein.name, "extra protein"));
                 sandwich.setExtraProtein(true);
             }
 
@@ -193,12 +191,18 @@ public class UserInterface {
 
             System.out.println("Would you like to add extra cheese? 1) yes 2) no");
             int extraCheeseSelection = inputScanner.nextInt();
-            boolean extraCheese = extraCheeseSelection == 1;
+            boolean wantsExtraCheese = extraCheeseSelection == 1;
 
-            int cheeseSelectionIndex = 1;
-            for(Cheese c : Cheese.values()){
-                System.out.println(cheeseSelectionIndex + ") " + c.name);
-
+            if(wantsExtraCheese){
+                int cheeseSelectionIndex = 1;
+                for(Cheese c : Cheese.values()){
+                    System.out.println(cheeseSelectionIndex + ") " + c.name);
+                    cheeseSelectionIndex++;
+                }
+                int extraCheeseChoice = inputScanner.nextInt();
+                Cheese extraCheese = Cheese.values()[extraCheeseChoice - 1];
+                sandwich.addExtras(new Topping(extraCheese.name, "extra cheese"));
+                sandwich.setExtraCheese(true);
             }
 
         }
@@ -296,6 +300,17 @@ public class UserInterface {
         }
         System.out.println("Total price: " + order.getPrice());
 
+        System.out.println("Enter 1) to confirm order");
+        System.out.println("Enter 2) to cancel order");
+        System.out.print("Selection:");
+        int orderChoice = inputScanner.nextInt();
+        boolean confirm = orderChoice == 1;
+        if(confirm){
+            ReceiptFileManager.saveReceipt(order);
+        } else if(!confirm){
+            order = null;
+        }
+        inputScanner.nextLine();
         // TODO: add logic to either confirm or cancel order
         // boolean confirm// boolean cancel
         // confirm write to file

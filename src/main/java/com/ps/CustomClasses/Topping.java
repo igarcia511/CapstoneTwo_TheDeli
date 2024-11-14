@@ -4,6 +4,7 @@ public class Topping {
     private String name;
     private String type;
     private double basePrice;
+    private double extrasBasePrice;
 
 
     public Topping(String name, String type) {
@@ -23,7 +24,39 @@ public class Topping {
     public void setType(String type) {
         this.type = type;
     }
+    public double getExtrasPrice(String sandwichSize){
+        if(type.equals("extra protein")){
+            switch(sandwichSize){
+                case "12 inch":
+                    extrasBasePrice = 1.50;
+                    break;
+                case "8 inch":
+                    extrasBasePrice = 1.00;
+                    break;
+                default:
+                    extrasBasePrice = .50;
+                    break;
+            }
+        } else if(type.equals("extra cheese")){
+            switch (sandwichSize){
+                case "12 inch":
+                    extrasBasePrice = .90;
+                    break;
+                case "8 inch":
+                    extrasBasePrice = .60;
+                    break;
+                default:
+                    extrasBasePrice = .30;
+            }
+        } else {
+            basePrice = 0;
+        }
+        return extrasBasePrice;
 
+    }
+ // create method for adding extra cheese and extra meat price similar to the getPrice
+    // below and then loop through it in the sandwich class and add get the price there
+    // and dont forget to pass the size of the sandwich
 
     public double getPrice(String sandwichSize) {
           if(type.equals("Protein")){
@@ -61,6 +94,6 @@ public class Topping {
 
     @Override
     public String toString() {
-        return this.name;
+        return  getName();
     }
 }
