@@ -22,6 +22,7 @@ public class UserInterface {
         int mainMenuCommand;
 
         do {
+            // Users choose 1 to create an Order and 0 to exit
             System.out.println("1) New Order");
             System.out.println("0) Exit");
 
@@ -47,10 +48,10 @@ public class UserInterface {
 
     private static void handleNewOrder() {
         int orderCommand;
-        ++orderIndexId;
+        ++orderIndexId;  // this index will be updated any time someone creates a new order
         System.out.print("Enter the name for the order: ");
         String orderName = inputScanner.nextLine();
-        order = new Order(orderName, orderIndexId);
+        order = new Order(orderName, orderIndexId); // order is created and initialized with the order name, and initial (index) Id
         do {
             System.out.println("1) Add Sandwich");
             System.out.println("2) Add Drink");
@@ -118,9 +119,13 @@ public class UserInterface {
 
         int sandwichToastedOption = inputScanner.nextInt();
         boolean isToasted = sandwichToastedOption == 1;
+
+        // Creation of the sandwich, initial boolean values set to false,if users decide to add extra cheese
+        // or protein they will be set to true using the setters for those properties
         sandwich = new Sandwich(breadOptions.get(breadChoice), breadSize.get(sandwichSize), isToasted, false, false);
 
         System.out.println("Topping selection");
+        //
         enum Protein {
             STEAK("steak"), HAM("ham"), SALAMI("salami"), ROAST_BEEF("roast beef"), CHICKEN("chicken"), BACON("bacon");
             private String name;
@@ -152,6 +157,7 @@ public class UserInterface {
         System.out.println("Choose a protein or enter 0 to skip");
 
         int index = 1;
+        //Looping through the Protein enum and displays the name with index
         for (Protein p : Protein.values()) {
             System.out.println(index + ") " + p.name);
             index++;
@@ -168,6 +174,7 @@ public class UserInterface {
 
             int extraProteinSelection = inputScanner.nextInt();
             boolean wantsExtraProtein = extraProteinSelection == 1;
+            // true then the extra protein logic will run and add selected extra meat to the extras list in sandwich class
             if (wantsExtraProtein) {
                 int extraProteinIndex = 1;
                 for (Protein p : Protein.values()) {
@@ -177,6 +184,7 @@ public class UserInterface {
                 System.out.print("Selection: ");
                 int extraProteinChoice = inputScanner.nextInt();
                 Protein extraProtein = Protein.values()[extraProteinChoice - 1];
+                // adds extra topping to extras list in sandwich class
                 sandwich.addExtras(new Topping(extraProtein.name, "extra protein"));
                 sandwich.setExtraProtein(true);
             }
@@ -186,6 +194,7 @@ public class UserInterface {
 
         System.out.println("Choose a cheese or enter 0 to skip");
         index = 1;
+        // Loops through the Cheese enums and displays them
         for (Cheese c : Cheese.values()) {
             System.out.println(index + ") " + c.name);
             index++;
@@ -198,6 +207,7 @@ public class UserInterface {
 
             System.out.println("Would you like to add extra cheese? 1) yes 2) no");
             System.out.print("Selection: ");
+            // If true, the logic for adding extra cheese runs
             int extraCheeseSelection = inputScanner.nextInt();
             boolean wantsExtraCheese = extraCheeseSelection == 1;
 
@@ -210,13 +220,14 @@ public class UserInterface {
                 System.out.print("Selection: ");
                 int extraCheeseChoice = inputScanner.nextInt();
                 Cheese extraCheese = Cheese.values()[extraCheeseChoice - 1];
+                // Adds extra cheese to the extras list in sandwich class
                 sandwich.addExtras(new Topping(extraCheese.name, "extra cheese"));
                 sandwich.setExtraCheese(true);
             }
 
         }
 
-
+        //This peice here loops and lets the user add toppings and when they are done they will enter 0 which will break the loop
         System.out.println("Choose veggies");
         while (true) {
             int veggieSelection;
@@ -230,6 +241,7 @@ public class UserInterface {
             System.out.print("Selection: ");
             veggieSelection = inputScanner.nextInt();
             if (veggieSelection == 0) break;
+            // if the condition is equal to 0, the loop will break
             Veggies veggieChoice = Veggies.values()[veggieSelection - 1];
             sandwich.addTopping(new Topping(veggieChoice.name, "Veggies"));
         }
@@ -242,32 +254,36 @@ public class UserInterface {
         sauces.put(5, "thousand island");
         sauces.put(6, "vinaigrette");
 
-
+        // Looping through hashmap and displaying the sauces
         System.out.println("Select a sauce or enter 0) to skip");
-        for(Integer key : sauces.keySet()){
+        for (Integer key : sauces.keySet()) {
             System.out.println(key + ")" + sauces.get(key));
         }
         System.out.print("Selection: ");
         int sauceSelection = inputScanner.nextInt();
-        if(sauceSelection > 0 && sauces.containsKey(sauceSelection)){
+        // if condition is met, the sandwich will now have a sauce
+        if (sauceSelection > 0 && sauces.containsKey(sauceSelection)) {
+            // this adds a sauce to the sandwich, sauce list
             sandwich.addSauce(new Topping(sauces.get(sauceSelection)));
-        } else if(sauceSelection == 0){
+        } else if (sauceSelection == 0) {
             System.out.println("No sauce selected...");
         }
 
         System.out.println("Select your side or enter 0) to skip");
         HashMap<Integer, String> sides = new HashMap<>();
         sides.put(1, "au jus");
-
+        // displays the one side
         System.out.println("1) au jus");
         int sideSelection = inputScanner.nextInt();
         boolean sideChoice = sideSelection == 1;
-        if(sideChoice){
+        //If condition is true it will add the side to the sides list in the sandwich class
+        if (sideChoice) {
             sandwich.addSide(new Topping(sides.get(sideSelection)));
         }
 
         Product product = sandwich;
-
+        // after collecting all the user input for sandwich,
+        // the sandwich will now be added to the order list of products in the Order class
         order.addProduct(product);
 
 
@@ -282,6 +298,7 @@ public class UserInterface {
                 this.name = name;
             }
         }
+        //Loops through the Drinks enum and displays drink options
         System.out.println("Drink options");
         int index = 1;
         for (Drinks d : Drinks.values()) {
@@ -290,7 +307,7 @@ public class UserInterface {
         }
         System.out.print("Selection: ");
         int drinkSelection = inputScanner.nextInt();
-
+        // user selects the size of drink
         System.out.println("What size drink would you like?");
         System.out.println("1) Large");
         System.out.println("2) Medium");
@@ -299,6 +316,7 @@ public class UserInterface {
         int sizeOption = inputScanner.nextInt();
 
         Product product;
+        // adds the drink to the list of products in the Order class
         Drinks drinkChoice = Drinks.values()[drinkSelection - 1];
         product = new Drink(drinkChoice.name, sizeOption);
 
@@ -315,6 +333,7 @@ public class UserInterface {
                 this.name = name;
             }
         }
+        //Loops through the Chips enum and displays the values
         System.out.println("Chip selection");
         int index = 1;
         for (Chips c : Chips.values()) {
@@ -323,7 +342,7 @@ public class UserInterface {
         }
         System.out.print("Selection: ");
         int chipSelection = inputScanner.nextInt();
-
+        // Select and add chips to the list of products in the Order class
         Chips chipChoice = Chips.values()[chipSelection - 1];
         Product product = new BagOfChips(chipChoice.name);
 
@@ -335,17 +354,24 @@ public class UserInterface {
     private static void handleCheckout() {
 
         System.out.println("Displaying order");
+        // Printing out the order id and name
         System.out.println("Id: " + order.getOrderId() + " Order Name: " + order.getOrderName());
+        // Looping through the orders and displaying them
         for (Product p : order.getProducts()) {
             System.out.print(p + "\n");
         }
+        // Printing the total price of the order
         System.out.println("Total price: " + order.getPrice());
 
         System.out.println("Enter 1) to confirm order");
         System.out.println("Enter 2) to cancel order");
         System.out.print("Selection:");
+        //
         int orderChoice = inputScanner.nextInt();
         boolean confirm = orderChoice == 1;
+        // if true the receipt(order) will be passed to the ReceiptFileManager class
+        // and there it will write it to the folder
+        // if it is false it will set the order to null and will restart the process
         if (confirm) {
             ReceiptFileManager.saveReceipt(order);
         } else if (!confirm) {
