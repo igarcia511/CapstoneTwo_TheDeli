@@ -54,6 +54,8 @@ all be written to the file successfully
 ![receiptFile](assets/orderFile.png)
 In this case I only have a sandwich with toppings, sauce, and a side
 
+# Diagram
+![diagram](assets/diagram.png)
 
 
 
