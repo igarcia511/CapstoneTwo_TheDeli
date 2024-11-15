@@ -12,6 +12,9 @@ public class Topping {
         this.type = type;
 
     }
+    public Topping(String name){
+        this.name = name;
+    }
 
     public String getName() {
         return name;

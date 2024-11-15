@@ -14,6 +14,8 @@ public class Sandwich extends Product {
     private double basePrice;
     List<Topping> toppings;
     List<Topping> extras;
+    List<Topping> sauces;
+    List<Topping> sides;
     //lIST OF SAUCES
     // LIST OF SIDES
 
@@ -25,19 +27,41 @@ public class Sandwich extends Product {
         this.extraCheese = extraCheese;
         this.toppings = new ArrayList<>();
         this.extras = new ArrayList<>();
+        this.sauces = new ArrayList<>();
+        this.sides = new ArrayList<>();
+    }
+
+    public void addSide(Topping side) {
+        sides.add(side);
+
+    }
+
+    public List<Topping> getSides() {
+        return this.sides;
+    }
+
+    public void addSauce(Topping sauce) {
+        sauces.add(sauce);
+
+    }
+
+    public List<Topping> getSauces() {
+        return this.sauces;
     }
 
     public void addTopping(Topping topping) {
         toppings.add(topping);
     }
-    public List<Topping> getToppings(){
+
+    public List<Topping> getToppings() {
         return this.toppings;
     }
 
     public void addExtras(Topping topping) {
         extras.add(topping);
     }
-    public List<Topping> getExtras(){
+
+    public List<Topping> getExtras() {
         return this.extras;
     }
 
@@ -101,37 +125,50 @@ public class Sandwich extends Product {
         }
         if (this.isExtraProtein()) {
             for (Topping t : extras) {
-                if(t.getType().equals("extra protein")){
+                if (t.getType().equals("extra protein")) {
                     this.basePrice += t.getExtrasPrice(size);
                 }
             }
         }
-        if(this.isExtraCheese()){
-            for(Topping t : extras){
-                if(t.getType().equals("extra cheese")){
+        if (this.isExtraCheese()) {
+            for (Topping t : extras) {
+                if (t.getType().equals("extra cheese")) {
                     this.basePrice += t.getExtrasPrice(size);
 
                 }
             }
         }
-
-
 
 
         return this.basePrice;
     }
-     public String getExtrasAsString(){
-         String extraToppingsAsStrings = extras.stream()
-                 .map(Topping::toString)
-                 .collect(Collectors.joining(", "));
-         return extraToppingsAsStrings;
-     }
-     public String getToppingsAsString(){
-         String toppingsAsStrings = toppings.stream()
-                 .map(Topping::toString)
-                 .collect(Collectors.joining(", "));
-         return toppingsAsStrings;
-     }
+  public String getSidesString(){
+      String sideString = sides.stream()
+              .map(Topping::toString)
+              .collect(Collectors.joining(""));
+      return sideString;
+  }
+    public String getSauceString() {
+        String sauceString = sauces.stream()
+                .map(Topping::toString)
+                .collect(Collectors.joining(""));
+        return sauceString;
+
+    }
+
+    public String getExtrasAsString() {
+        String extraToppingsAsStrings = extras.stream()
+                .map(Topping::toString)
+                .collect(Collectors.joining(", "));
+        return extraToppingsAsStrings;
+    }
+
+    public String getToppingsAsString() {
+        String toppingsAsStrings = toppings.stream()
+                .map(Topping::toString)
+                .collect(Collectors.joining(", "));
+        return toppingsAsStrings;
+    }
 
     @Override
     public String toString() {
@@ -142,6 +179,14 @@ public class Sandwich extends Product {
         String extraToppingsAsStrings = extras.stream()
                 .map(Topping::toString)
                 .collect(Collectors.joining(","));
-        return String.format("Sandwich: %s, %s, %s, Toppings: %s, Extras: %s", getBreadType(), getSize(), getIsToasted(), toppingsAsStrings, extraToppingsAsStrings);
+
+        String sauceString = sauces.stream()
+                .map(Topping::toString)
+                .collect(Collectors.joining(""));
+
+        String sideString = sides.stream()
+                .map(Topping::toString)
+                .collect(Collectors.joining(""));
+        return String.format("Sandwich: %s, %s, %s, Toppings: %s, Extras: %s, Sauce: %s, Side: %s", getBreadType(), getSize(), getIsToasted(), toppingsAsStrings, extraToppingsAsStrings, sauceString, sideString);
     }
 }

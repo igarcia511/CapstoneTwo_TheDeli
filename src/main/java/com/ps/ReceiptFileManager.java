@@ -23,39 +23,70 @@ public class ReceiptFileManager {
 
         String fileName = folderName + File.separator + "Id_" +order.getOrderId() + "_Order Name_" + order.getOrderName() + ".txt";
         File receiptFile = new File(fileName);
-          String sandwichOrder = null;
-//          String toppings;
-//          String extraToppings;
-          String drinkOrder = null;
-          String chipOrder;
+          StringBuilder sandwichOrders = new StringBuilder();
+          StringBuilder drinkOrders = new StringBuilder();
+          StringBuilder chipOrders = new StringBuilder();
         for(Product p : order.getProducts()){
+
             if(p instanceof Sandwich s){
-                 sandwichOrder = String.format("Sandwich: %s, %s, %s | Toppings: %s | Extras: %s",
+                 String sandwichOrder = String.format("Sandwich: %s, %s, %s | Toppings: %s | Extras: %s | Sauce: %s | Side: %s",
                         s.getBreadType(),
                         s.getSize(),
                         s.getIsToasted(),
                          s.getToppingsAsString(),
-                         s.getExtrasAsString());
+                         s.getExtrasAsString(),
+                         s.getSauceString(),
+                         s.getSidesString());
+                   sandwichOrders.append(sandwichOrder).append("\n");
             }
 
             if(p instanceof Drink d){
-                drinkOrder = String.format("Drink(s): %s, Size: %s",
+                String drinkOrder = String.format("Drink: %s, Size: %s",
                         d.getName(),
                         d.getStringSize());
-
+                   drinkOrders.append(drinkOrder).append("\n");
             }
-        }
+
+            if(p instanceof BagOfChips c){
+               String chipOrder = String.format("Chips: %s", c.getName());
+               chipOrders.append(chipOrder).append("\n");
+            }
+          }
+
+            String thankYou = "=========================================================\n" +
+                    "___________.__           ________         .__  .__ \n" +
+                    "\\__    ___/|  |__   ____ \\______ \\   ____ |  | |__|\n" +
+                    "  |    |   |  |  \\_/ __ \\ |    |  \\_/ __ \\|  | |  |\n" +
+                    "  |    |   |   Y  \\  ___/ |    `   \\  ___/|  |_|  |\n" +
+                    "  |____|   |___|  /\\___  >_______  /\\___  >____/__|\n" +
+                    "                \\/     \\/        \\/     \\/                 \n" +
+                    "=========================================================\n";
+
+
 
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(receiptFile));
-            bufferedWriter.write("Order Id: "+ order.getOrderId() + " Order Name: " + order.getOrderName() + " Time of order: " + timeOfOrder);
-            bufferedWriter.write("\n---------------------------------------------------");
-            if(!sandwichOrder.isEmpty()){
-                bufferedWriter.write("\n" + sandwichOrder);
+
+            bufferedWriter.write("=========================================================\n");
+            bufferedWriter.write("Order Id: "+ order.getOrderId() + " Order Name: " + order.getOrderName() + "\n");
+            bufferedWriter.write("Time of order: " + timeOfOrder + "\n");
+            bufferedWriter.write("=========================================================\n");
+            bufferedWriter.write("Items: \n");
+            if(!sandwichOrders.isEmpty()){
+                bufferedWriter.write("\n" + sandwichOrders);
             }
-            if(!drinkOrder.isEmpty()){
-                bufferedWriter.write("\n" + drinkOrder);
+            if(!drinkOrders.isEmpty()){
+                bufferedWriter.write("\n" + drinkOrders);
             }
+            if(!chipOrders.isEmpty()){
+                bufferedWriter.write("\n" + chipOrders);
+            }
+            bufferedWriter.write("---------------------------------------------------------\n");
+            bufferedWriter.write(String.format("Total Price: %.2f", order.getPrice()) +"\n");
+            bufferedWriter.write("=========================================================\n");
+            bufferedWriter.write("Thank you for your order!\n");
+            bufferedWriter.write(thankYou);
+
 
             bufferedWriter.close();
 
